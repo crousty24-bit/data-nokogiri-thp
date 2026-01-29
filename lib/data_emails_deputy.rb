@@ -10,7 +10,7 @@ def get_deputy_urls(all_urls)
   urls_array = []
 
   deputy_links.each do |link|
-    full_url = "https://www2.assemblee-nationale.fr" + link['href'] # rebuil full url cause 'relative link' in page.xpath
+    full_url = "https://www2.assemblee-nationale.fr" + link['href'] # rebuild full url cause 'relative link' in page.xpath
     urls_array<< full_url
   end
   return urls_array
