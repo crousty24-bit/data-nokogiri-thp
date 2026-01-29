@@ -10,11 +10,11 @@ def get_townhall_email(townhall_url)
     href_value = link['href']
     href_value.include?("@") && !href_value.include?("subject=")
   end
-  if email_element.nil? then return "email not found" end
+  if email_element.nil? then return "email not found !" end
   return email_element['href'].delete_prefix("mailto:")
 end
 
-puts "email of Avernes : #{get_townhall_email(avernes_url)}"
+#puts "email of Avernes : #{get_townhall_email(avernes_url)}"
 
 all_townhall_url = "https://lannuaire.service-public.gouv.fr/navigation/ile-de-france/val-d-oise/mairie"
 
@@ -30,5 +30,32 @@ def get_townhall_urls(all_urls)
   return urls_array
 end
 
-puts "number of townhall: #{get_townhall_urls(all_townhall_url).length}" 
-puts "url found: #{get_townhall_urls(all_townhall_url)}"
+#puts "number of townhall: #{get_townhall_urls(all_townhall_url).length}" 
+#puts "url found: #{get_townhall_urls(all_townhall_url)}"
+
+def perform
+  index_url = "https://lannuaire.service-public.gouv.fr/navigation/ile-de-france/val-d-oise/mairie"
+  puts "Retrieving townhall's URLs ..."
+  townhall_urls = get_townhall_urls(index_url)
+  puts "#{townhall_urls.length} townhalls found. Retrieving emails now ..."
+
+  final_array = []
+
+  townhall_urls.each do |url|
+    email = get_townhall_email(url)
+    page_temp = Nokogiri::HTML(URI.open(url))
+    town_name = page_temp.xpath('//h1').text.strip
+    clean_name = town_name.gsub("Mairie - ", "")
+
+    result = {clean_name => email}
+    final_array<< result
+
+    puts "Mairie : #{clean_name} | Email : #{email}"
+  end
+
+  puts "---------------------"
+  puts "Done ! Final result :"
+  return final_array
+end
+
+puts perform
