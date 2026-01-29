@@ -28,7 +28,7 @@ def get_deputy_data(deputy_url)
     href_value = link['href']
     href_value.include?("@")
   end
-  if email_element.nil? then return "email not found !" end
+  if email_element.nil? then return nil end
   final_email = email_element['href'].delete_prefix("mailto:")
 
   full_name = page.xpath('//h1').text.strip # get fullname in H1
@@ -49,12 +49,12 @@ end
 #puts "email of specific deputy : #{get_deputy_email(deputy_test_url)}"
 
 def perform
-  puts "Retreiving list of all deputy ..."
+  #puts "Retreiving list of all deputy ..."
   index_url = "https://www2.assemblee-nationale.fr/deputes/liste/alphabetique"
   urls = get_deputy_urls(index_url)
-  subset_urls = urls.first(20)
+  subset_urls = urls.first(10)
   
-  puts "Found #{subset_urls.length} deputy to scan. Starting now ..."
+  #puts "Found #{subset_urls.length} deputy to scan. Starting now ..."
 
   final_array = []
 
@@ -62,12 +62,16 @@ def perform
     data = get_deputy_data(url)
     if data
       final_array << data
-      puts "Scrapped: #{data['first_name']} #{data['last_name']} | #{data['email']}"
+      #puts "Scrapped: #{data['first_name']} #{data['last_name']} | #{data['email']}"
     end
   end
-  puts "-----------------------------"
-  puts "Done ! Here's the final result :"
+  #puts "-----------------------------"
+  #puts "Done ! Here's the final result :"
   return final_array
 end
 
-puts perform
+if __FILE__ == $0
+  puts perform
+end
+
+# if file is the main file executed -> run perform. Otherwise (if rspec), dont do anything.
