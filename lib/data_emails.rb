@@ -19,9 +19,9 @@ all_townhall_url = "https://lannuaire.service-public.gouv.fr/navigation/ile-de-f
 def get_townhall_urls(all_urls)
   page = Nokogiri::HTML(URI.open(all_urls))
   town_links = page.xpath('//li[contains(@class, "result-item")]//a')
-
+  
   urls_array = []
-
+  
   town_links.each do |link| 
     urls_array<< link['href']
   end
@@ -33,21 +33,21 @@ def perform
   puts "Retrieving townhall's URLs ..."
   townhall_urls = get_townhall_urls(index_url)
   puts "#{townhall_urls.length} townhalls found. Retrieving emails now ..."
-
+  
   final_array = []
-
+  
   townhall_urls.each do |url|
     email = get_townhall_email(url)
     page_temp = Nokogiri::HTML(URI.open(url))
     town_name = page_temp.xpath('//h1').text.strip
     clean_name = town_name.gsub("Mairie - ", "")
-
+    
     result = {clean_name => email}
     final_array<< result
-
+    
     puts "Mairie : #{clean_name} | Email : #{email}"
   end
-
+  
   puts "---------------------"
   puts "Done ! Final result :"
   return final_array

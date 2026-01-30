@@ -6,9 +6,9 @@ deputy_list_url = "https://www2.assemblee-nationale.fr/deputes/liste/alphabetiqu
 def get_deputy_urls(all_urls)
   page = Nokogiri::HTML(URI.open(all_urls))
   deputy_links = page.xpath('//*[@id="deputes-list"]//a[@href]') # '*' all tags ; add 'a' cause we want href links
-
+  
   urls_array = []
-
+  
   deputy_links.each do |link|
     full_url = "https://www2.assemblee-nationale.fr" + link['href'] #rebuild full url cause 'relative link' in page.xpath
     urls_array<< full_url
@@ -27,7 +27,7 @@ def get_deputy_data(deputy_url)
   end
   if email_element.nil? then return nil end
   final_email = email_element['href'].delete_prefix("mailto:")
-
+  
   full_name = page.xpath('//h1').text.strip # get fullname in H1
   clean_name = full_name.gsub("M. ", "").gsub("Mme ", "") # clean remove M & Mme
   name_parts = clean_name.split(" ") # split into parts between spaces
@@ -50,9 +50,9 @@ def perform
   subset_urls = urls.first(10)
   
   puts "Found #{subset_urls.length} deputy to scan. Starting now ..."
-
+  
   final_array = []
-
+  
   subset_urls.each do |url|
     data = get_deputy_data(url)
     if data
