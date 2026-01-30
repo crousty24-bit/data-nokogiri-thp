@@ -10,16 +10,13 @@ def get_deputy_urls(all_urls)
   urls_array = []
 
   deputy_links.each do |link|
-    full_url = "https://www2.assemblee-nationale.fr" + link['href'] # rebuild full url cause 'relative link' in page.xpath
+    full_url = "https://www2.assemblee-nationale.fr" + link['href'] #rebuild full url cause 'relative link' in page.xpath
     urls_array<< full_url
   end
   return urls_array
 end
 
-#puts "number of deputy found: #{get_deputy_urls(deputy_list_url).length}"
-#puts "example of url: #{get_deputy_urls(deputy_list_url).first}"
-
-deputy_test_url = "https://www.assemblee-nationale.fr/dyn/deputes/PA408578" #Jean-Didier Berger
+deputy_test_url = "https://www.assemblee-nationale.fr/dyn/deputes/PA408578"
 
 def get_deputy_data(deputy_url)
   page = Nokogiri::HTML(URI.open(deputy_url))
@@ -46,15 +43,13 @@ rescue => e
   return nil # case if any error happen in the page
 end
 
-#puts "email of specific deputy : #{get_deputy_email(deputy_test_url)}"
-
 def perform
-  #puts "Retreiving list of all deputy ..."
+  puts "Retreiving list of all deputy ..."
   index_url = "https://www2.assemblee-nationale.fr/deputes/liste/alphabetique"
   urls = get_deputy_urls(index_url)
   subset_urls = urls.first(10)
   
-  #puts "Found #{subset_urls.length} deputy to scan. Starting now ..."
+  puts "Found #{subset_urls.length} deputy to scan. Starting now ..."
 
   final_array = []
 
@@ -62,11 +57,11 @@ def perform
     data = get_deputy_data(url)
     if data
       final_array << data
-      #puts "Scrapped: #{data['first_name']} #{data['last_name']} | #{data['email']}"
+      puts "Scrapped: #{data['first_name']} #{data['last_name']} | #{data['email']}"
     end
   end
-  #puts "-----------------------------"
-  #puts "Done ! Here's the final result :"
+  puts "-----------------------------"
+  puts "Done ! Here's the final result :"
   return final_array
 end
 
