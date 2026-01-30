@@ -14,8 +14,6 @@ def get_townhall_email(townhall_url)
   return email_element['href'].delete_prefix("mailto:")
 end
 
-#puts "email of Avernes : #{get_townhall_email(avernes_url)}"
-
 all_townhall_url = "https://lannuaire.service-public.gouv.fr/navigation/ile-de-france/val-d-oise/mairie"
 
 def get_townhall_urls(all_urls)
@@ -29,9 +27,6 @@ def get_townhall_urls(all_urls)
   end
   return urls_array
 end
-
-#puts "number of townhall: #{get_townhall_urls(all_townhall_url).length}" 
-#puts "url found: #{get_townhall_urls(all_townhall_url)}"
 
 def perform
   index_url = "https://lannuaire.service-public.gouv.fr/navigation/ile-de-france/val-d-oise/mairie"
@@ -58,4 +53,8 @@ def perform
   return final_array
 end
 
-puts perform
+if __FILE__ == $0
+  puts perform
+end
+
+# if file is the main file executed -> run perform. Otherwise (if rspec), dont do anything.
